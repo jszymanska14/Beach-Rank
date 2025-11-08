@@ -94,6 +94,12 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
+.sidebar-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .sidebar-header h2 {
   font-size: 1.5rem;
   color: #1f2937;
@@ -114,6 +120,24 @@
 .reset-btn:hover {
   background: #e5e7eb;
   color: #374151;
+}
+
+.sidebar-close {
+  display: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: 999px;
+  background: #f3f4f6;
+  cursor: pointer;
+  font-size: 1.125rem;
+  color: #4b5563;
+  transition: all 0.2s ease;
+}
+
+.sidebar-close:hover {
+  background: #e5e7eb;
+  color: #111827;
 }
 
 .filters-content {
@@ -312,11 +336,13 @@
   }
 
   .filter-sidebar {
-    width: 85%;
-    max-width: 320px;
+    width: 100%;
+    max-width: none;
     top: 0;
+    right: 0;
+    left: 0;
     bottom: 0;
-    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
   }
 
   .filter-sidebar.closed {
@@ -324,19 +350,21 @@
   }
 
   .sidebar-toggle {
-    left: 0;
-    top: 120px;
-    width: 48px;
-    height: 48px;
-    font-size: 1.25rem;
+    display: none;
   }
 
   .sidebar-toggle.open {
-    left: min(85vw, 320px);
+    display: none;
   }
 
   .sidebar-header {
     padding: 1rem;
+  }
+
+  .sidebar-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .filters-content {

@@ -5,11 +5,13 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.2s ease;
   border: 1px solid #e5e7eb;
+  cursor: pointer;
 }
 
 .beach-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-color: #d1d5db;
+  transform: translateY(-1px);
 }
 
 .card-header {

@@ -66,11 +66,16 @@
 @media (max-width: 768px) {
   .resizable-container {
     flex-direction: column;
+    touch-action: pan-y;
+    height: 100%;
   }
 
   .resizable-panel.left,
   .resizable-panel.right {
     width: 100% !important;
+    height: 100%;
+    flex: 1;
+    overflow: auto;
   }
 
   .resizable-divider {

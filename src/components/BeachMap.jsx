@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import './BeachMap.css'
 import { getCrowdingLevel } from '../utils/crowding'
@@ -101,9 +101,73 @@ function ZoomWatcher({ onZoomChange }) {
   return null
 }
 
-function BeachMap({ beaches, isFullscreen, onToggleFullscreen }) {
+function MapCenter({ selectedBeach }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (selectedBeach) {
+      map.setView([selectedBeach.lat, selectedBeach.lng], 13, {
+        animate: true,
+        duration: 1
+      })
+    }
+  }, [selectedBeach, map])
+
+  return null
+}
+
+function BeachMarker({ beach, isSelected, crowdingLevel }) {
+  const markerRef = useRef(null)
+
+  useEffect(() => {
+    if (isSelected && markerRef.current) {
+      markerRef.current.openPopup()
+    }
+  }, [isSelected])
+
+  return (
+    <Marker
+      ref={markerRef}
+      position={[beach.lat, beach.lng]}
+      icon={getCrowdingIcon(beach.crowding)}
+    >
+      <Popup>
+        <div className="map-popup">
+          <h3>{beach.name}</h3>
+          <p><strong>{beach.city}</strong></p>
+          
+          <div className="popup-highlight">
+            <div className={`popup-main-stat ${beach.cyanobacteria ? 'warning' : 'good'}`}>
+              <span className="popup-icon">🫧</span>
+              <div>
+                <div className="popup-label">Sinice</div>
+                <div className="popup-value">{beach.cyanobacteria ? 'Tak' : 'Nie'}</div>
+              </div>
+            </div>
+            <div className={`popup-main-stat crowding ${crowdingLevel}`}>
+              <span className="popup-icon">👥</span>
+              <div>
+                <div className="popup-label">Zatłoczenie</div>
+                <div className="popup-value">{beach.crowding}%</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="popup-stats">
+            <p>🌡️ Temp. powietrza: {beach.temperature}°C</p>
+            <p>💧 Temp. wody: {beach.waterTemperature}°C</p>
+            <p>💨 Wiatr: {beach.windSpeed} km/h</p>
+          </div>
+        </div>
+      </Popup>
+    </Marker>
+  )
+}
+
+function BeachMap({ beaches, isFullscreen, onToggleFullscreen, selectedBeach }) {
   const center = [54.3520, 17.0466]
   const [currentZoom, setCurrentZoom] = useState(7)
+  const [openPopupId, setOpenPopupId] = useState(null)
 
   const handleZoomChange = useCallback(zoomValue => {
     setCurrentZoom(Math.round(zoomValue))
@@ -130,6 +194,12 @@ function BeachMap({ beaches, isFullscreen, onToggleFullscreen }) {
     [visibleAdvertisements]
   )
 
+  useEffect(() => {
+    if (selectedBeach) {
+      setOpenPopupId(selectedBeach.id)
+    }
+  }, [selectedBeach])
+
   return (
     <div className={`map-container ${isFullscreen ? 'fullscreen' : ''}`}>
       <button
@@ -151,44 +221,17 @@ function BeachMap({ beaches, isFullscreen, onToggleFullscreen }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomWatcher onZoomChange={handleZoomChange} />
+        <MapCenter selectedBeach={selectedBeach} />
         {beaches.map(beach => {
           const crowdingLevel = getCrowdingLevel(beach.crowding)
+          const isSelected = openPopupId === beach.id
           return (
-            <Marker
+            <BeachMarker
               key={beach.id}
-              position={[beach.lat, beach.lng]}
-              icon={getCrowdingIcon(beach.crowding)}
-            >
-              <Popup>
-                <div className="map-popup">
-                  <h3>{beach.name}</h3>
-                  <p><strong>{beach.city}</strong></p>
-                  
-                  <div className="popup-highlight">
-                    <div className={`popup-main-stat ${beach.cyanobacteria ? 'warning' : 'good'}`}>
-                      <span className="popup-icon">🫧</span>
-                      <div>
-                        <div className="popup-label">Sinice</div>
-                        <div className="popup-value">{beach.cyanobacteria ? 'Tak' : 'Nie'}</div>
-                      </div>
-                    </div>
-                    <div className={`popup-main-stat crowding ${crowdingLevel}`}>
-                      <span className="popup-icon">👥</span>
-                      <div>
-                        <div className="popup-label">Zatłoczenie</div>
-                        <div className="popup-value">{beach.crowding}%</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="popup-stats">
-                    <p>🌡️ Temp. powietrza: {beach.temperature}°C</p>
-                    <p>💧 Temp. wody: {beach.waterTemperature}°C</p>
-                    <p>💨 Wiatr: {beach.windSpeed} km/h</p>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
+              beach={beach}
+              isSelected={isSelected}
+              crowdingLevel={crowdingLevel}
+            />
           )
         })}
         {advertisementMarkers.map(advertisement => (

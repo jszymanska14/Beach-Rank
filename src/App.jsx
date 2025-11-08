@@ -9,7 +9,7 @@ import './App.css'
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 768)
   const [isMapFullscreen, setIsMapFullscreen] = useState(false)
-  const [showMap, setShowMap] = useState(false)
+  const [selectedBeach, setSelectedBeach] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState({
     minTemp: 0,
@@ -23,6 +23,17 @@ function App() {
   })
 
   const filteredBeaches = filterBeaches(beaches, filters, searchQuery)
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+  const openSidebar = () => setIsSidebarOpen(true)
+  const closeSidebar = () => setIsSidebarOpen(false)
+  const openMapFullscreen = () => setIsMapFullscreen(true)
+
+  const handleBeachClick = (beach) => {
+    setSelectedBeach(beach)
+    if (window.innerWidth <= 768) {
+      setIsMapFullscreen(true)
+    }
+  }
 
   return (
     <div className="app">
@@ -33,33 +44,20 @@ function App() {
       <div className="app-content">
         <FilterSidebar
           isOpen={isSidebarOpen}
-          onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+          onToggle={toggleSidebar}
+          onClose={closeSidebar}
           filters={filters}
           onFilterChange={setFilters}
         />
 
         <main className={`main-content ${!isSidebarOpen ? 'sidebar-closed' : ''}`}>
-          <div className="mobile-view-toggle">
-            <button
-              className={`view-btn ${!showMap ? 'active' : ''}`}
-              onClick={() => setShowMap(false)}
-            >
-              📋 Lista
-            </button>
-            <button
-              className={`view-btn ${showMap ? 'active' : ''}`}
-              onClick={() => setShowMap(true)}
-            >
-              🗺️ Mapa
-            </button>
-          </div>
-
-          <div className={`content-wrapper ${showMap ? 'show-map' : 'show-list'}`}>
+          <div className="content-wrapper">
             {isMapFullscreen ? (
               <BeachMap
                 beaches={filteredBeaches}
                 isFullscreen={isMapFullscreen}
                 onToggleFullscreen={() => setIsMapFullscreen(!isMapFullscreen)}
+                selectedBeach={selectedBeach}
               />
             ) : (
               <ResizablePanels
@@ -68,6 +66,9 @@ function App() {
                     beaches={filteredBeaches}
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
+                    onOpenFilters={openSidebar}
+                    onOpenMap={openMapFullscreen}
+                    onBeachClick={handleBeachClick}
                   />
                 }
                 rightPanel={
@@ -75,6 +76,7 @@ function App() {
                     beaches={filteredBeaches}
                     isFullscreen={isMapFullscreen}
                     onToggleFullscreen={() => setIsMapFullscreen(!isMapFullscreen)}
+                    selectedBeach={selectedBeach}
                   />
                 }
               />

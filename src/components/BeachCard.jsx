@@ -1,11 +1,11 @@
 import './BeachCard.css'
 import { getCrowdingColor, getCrowdingLevel } from '../utils/crowding'
 
-function BeachCard({ beach }) {
+function BeachCard({ beach, onClick }) {
   const crowdingLevel = getCrowdingLevel(beach.crowding)
   
   return (
-    <div className="beach-card">
+    <div className="beach-card" onClick={() => onClick && onClick(beach)}>
       <div className="card-header">
         <div>
           <h3>{beach.name}</h3>

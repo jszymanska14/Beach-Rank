@@ -47,8 +47,17 @@ function DualRange({ min, max, step = 1, values, onChange, formatValue }) {
   )
 }
 
-function FilterSidebar({ isOpen, onToggle, filters, onFilterChange }) {
+function FilterSidebar({ isOpen, onToggle, onClose, filters, onFilterChange }) {
   const regions = ['Pomorskie', 'Zachodniopomorskie']
+  const handleClose = () => {
+    if (onClose) {
+      onClose()
+      return
+    }
+    if (onToggle) {
+      onToggle()
+    }
+  }
 
   const updateFilter = (key, value) => {
     onFilterChange({ ...filters, [key]: value })
@@ -80,11 +89,14 @@ function FilterSidebar({ isOpen, onToggle, filters, onFilterChange }) {
 
   return (
     <>
-      {isOpen && <div className="sidebar-overlay" onClick={onToggle} />}
+      {isOpen && <div className="sidebar-overlay" onClick={handleClose} />}
       <aside className={`filter-sidebar ${isOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <h2>Filtry</h2>
-          <button className="reset-btn" onClick={resetFilters}>Resetuj</button>
+          <div className="sidebar-header-actions">
+            <button className="reset-btn" onClick={resetFilters}>Resetuj</button>
+            <button className="sidebar-close" onClick={handleClose} aria-label="Zamknij filtry">✕</button>
+          </div>
         </div>
 
         <div className="filters-content">
