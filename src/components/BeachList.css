@@ -1,0 +1,91 @@
+.beach-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.beach-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.beach-list-header h2 {
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.selected-count {
+  background: #667eea;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.beach-cards {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.beach-cards::-webkit-scrollbar {
+  width: 8px;
+}
+
+.beach-cards::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.beach-cards::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.beach-cards::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.no-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6b7280;
+  font-size: 1.125rem;
+}
+
+@media (max-width: 768px) {
+  .beach-list {
+    max-height: none;
+    height: 100%;
+  }
+
+  .beach-list-header {
+    padding: 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .beach-list-header h2 {
+    font-size: 1.125rem;
+  }
+
+  .selected-count {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+  }
+
+  .beach-cards {
+    gap: 0.75rem;
+    padding: 0;
+  }
+}
+
