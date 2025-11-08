@@ -6,14 +6,11 @@ Aplikacja do porównywania i filtrowania plaż w Polsce.
 
 - Interaktywna mapa z lokalizacjami plaż
 - Zaawansowane filtrowanie po wielu parametrach:
+  - Poziom zatłoczenia
+  - Obecność sinic
   - Temperatura powietrza i wody
   - Siła wiatru
-  - Obecność sinic
-  - Jakość powietrza
-  - Poziom zatłoczenia
   - Region
-- Porównywanie wybranych plaż
-- Fullscreen dla mapy
 - Responsywny design
 
 ## Instalacja
