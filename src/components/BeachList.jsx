@@ -1,16 +1,29 @@
 import BeachCard from './BeachCard'
 import './BeachList.css'
 
-function BeachList({ beaches, selectedBeaches, onToggleSelection }) {
+function BeachList({ beaches, searchQuery, onSearchChange }) {
   return (
     <div className="beach-list">
       <div className="beach-list-header">
         <h2>Znalezione plaże ({beaches.length})</h2>
-        {selectedBeaches.length > 0 && (
-          <span className="selected-count">
-            {selectedBeaches.length} zaznaczonych
-          </span>
-        )}
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="🔍 Wyszukaj plażę po nazwie..."
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
+          {searchQuery && (
+            <button
+              className="search-clear"
+              onClick={() => onSearchChange('')}
+              title="Wyczyść wyszukiwanie"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
       <div className="beach-cards">
         {beaches.length === 0 ? (
@@ -22,8 +35,6 @@ function BeachList({ beaches, selectedBeaches, onToggleSelection }) {
             <BeachCard
               key={beach.id}
               beach={beach}
-              isSelected={selectedBeaches.includes(beach.id)}
-              onToggleSelection={() => onToggleSelection(beach.id)}
             />
           ))
         )}

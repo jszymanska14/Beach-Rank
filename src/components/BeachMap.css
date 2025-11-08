@@ -8,24 +8,6 @@
   min-height: 400px;
 }
 
-.custom-div-icon {
-  background: transparent;
-  border: none;
-}
-
-.surfing-marker {
-  font-size: 32px;
-  text-align: center;
-  line-height: 30px;
-  cursor: pointer;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-  transition: transform 0.2s;
-}
-
-.surfing-marker:hover {
-  transform: scale(1.2);
-}
-
 .map-container.fullscreen {
   position: fixed;
   top: 0;
@@ -64,6 +46,10 @@
   color: #667eea;
 }
 
+.map-popup {
+  min-width: 200px;
+}
+
 .map-popup h3 {
   font-size: 1rem;
   margin-bottom: 0.25rem;
@@ -73,32 +59,146 @@
 .map-popup p {
   font-size: 0.875rem;
   color: #6b7280;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.popup-highlight {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  padding: 0.75rem 0;
+  border-top: 2px solid #e5e7eb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.popup-main-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.popup-main-stat.warning {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.popup-main-stat.good {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.popup-main-stat.crowding.low {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.popup-main-stat.crowding.medium {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.popup-main-stat.crowding.high {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.popup-icon {
+  font-size: 1.5rem;
+}
+
+.popup-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.125rem;
+}
+
+.popup-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.popup-main-stat.warning .popup-value {
+  color: #ef4444;
+}
+
+.popup-main-stat.good .popup-value {
+  color: #10b981;
+}
+
+.popup-main-stat.crowding.low .popup-value {
+  color: #10b981;
+}
+
+.popup-main-stat.crowding.medium .popup-value {
+  color: #f59e0b;
+}
+
+.popup-main-stat.crowding.high .popup-value {
+  color: #ef4444;
 }
 
 .popup-stats {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  margin-top: 0.5rem;
 }
 
 .popup-stats p {
   font-size: 0.75rem;
   margin: 0;
-  padding: 0.25rem 0;
+  padding: 0.375rem 0;
   border-bottom: 1px solid #f3f4f6;
+  color: #6b7280;
 }
 
 .popup-stats p:last-child {
   border-bottom: none;
 }
 
-.popup-stats .sports-list {
-  background: #f0f9ff;
-  padding: 0.5rem;
-  border-radius: 4px;
-  margin-top: 0.5rem;
+.advertisement-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.advertisement-marker {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #2563eb;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.advertisement-popup {
+  min-width: 160px;
+}
+
+.advertisement-popup h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.advertisement-popup p {
+  font-size: 0.875rem;
+  margin: 0;
+  color: #2563eb;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
@@ -116,6 +216,10 @@
     right: 0.75rem;
   }
 
+  .map-popup {
+    min-width: 240px;
+  }
+
   .map-popup h3 {
     font-size: 1.125rem;
   }
@@ -124,9 +228,31 @@
     font-size: 1rem;
   }
 
+  .popup-highlight {
+    gap: 0.625rem;
+    margin: 1rem 0;
+    padding: 1rem 0;
+  }
+
+  .popup-main-stat {
+    padding: 0.75rem;
+  }
+
+  .popup-icon {
+    font-size: 1.75rem;
+  }
+
+  .popup-label {
+    font-size: 0.6875rem;
+  }
+
+  .popup-value {
+    font-size: 1rem;
+  }
+
   .popup-stats p {
     font-size: 0.875rem;
-    padding: 0.375rem 0;
+    padding: 0.5rem 0;
   }
 }
 
