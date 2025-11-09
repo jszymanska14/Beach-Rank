@@ -106,7 +106,7 @@ function getFocusZoom(map) {
 }
 
 function focusMapOnBeach(map, beach) {
-  if (!beach) {
+  if (!beach || !beach.lat || !beach.lng || isNaN(beach.lat) || isNaN(beach.lng)) {
     return
   }
   map.flyTo([beach.lat, beach.lng], getFocusZoom(map), {
@@ -127,7 +127,7 @@ function MapCenter({ selectedBeach, isFullscreen }) {
   }, [focusSelectedBeach])
 
   useEffect(() => {
-    const delay = isFullscreen ? 300 : 100
+    const delay = isFullscreen ? 300 : 0
     const timeoutId = setTimeout(() => {
       map.invalidateSize()
       focusSelectedBeach()
