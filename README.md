@@ -2,6 +2,10 @@
 
 Aplikacja do porównywania i filtrowania plaż w Polsce.
 
+## Live Demo
+
+- https://jszymanska14.github.io/Beach-Rank/
+
 ## Funkcjonalności
 
 - Interaktywna mapa z lokalizacjami plaż
