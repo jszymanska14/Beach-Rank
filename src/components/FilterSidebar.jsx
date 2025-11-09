@@ -172,6 +172,10 @@ function FilterSidebar({ isOpen, onToggle, onClose, filters, onFilterChange }) {
               ))}
             </div>
           </div>
+
+          <button className="confirm-filters-btn" onClick={handleClose}>
+            Zatwierdź
+          </button>
         </div>
       </aside>
 

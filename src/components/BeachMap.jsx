@@ -101,17 +101,39 @@ function ZoomWatcher({ onZoomChange }) {
   return null
 }
 
-function MapCenter({ selectedBeach }) {
+function getFocusZoom(map) {
+  return Math.max(map.getZoom(), 13)
+}
+
+function focusMapOnBeach(map, beach) {
+  if (!beach) {
+    return
+  }
+  map.flyTo([beach.lat, beach.lng], getFocusZoom(map), {
+    animate: true,
+    duration: 1
+  })
+}
+
+function MapCenter({ selectedBeach, isFullscreen }) {
   const map = useMap()
 
+  const focusSelectedBeach = useCallback(() => {
+    focusMapOnBeach(map, selectedBeach)
+  }, [map, selectedBeach])
+
   useEffect(() => {
-    if (selectedBeach) {
-      map.setView([selectedBeach.lat, selectedBeach.lng], 13, {
-        animate: true,
-        duration: 1
-      })
-    }
-  }, [selectedBeach, map])
+    focusSelectedBeach()
+  }, [focusSelectedBeach])
+
+  useEffect(() => {
+    const delay = isFullscreen ? 300 : 0
+    const timeoutId = setTimeout(() => {
+      map.invalidateSize()
+      focusSelectedBeach()
+    }, delay)
+    return () => clearTimeout(timeoutId)
+  }, [isFullscreen, map, focusSelectedBeach])
 
   return null
 }
@@ -134,11 +156,10 @@ function BeachMarker({ beach, isSelected, crowdingLevel }) {
       <Popup>
         <div className="map-popup">
           <h3>{beach.name}</h3>
-          <p><strong>{beach.city}</strong></p>
           
           <div className="popup-highlight">
             <div className={`popup-main-stat ${beach.cyanobacteria ? 'warning' : 'good'}`}>
-              <span className="popup-icon">🫧</span>
+              <span className="popup-icon">🦠</span>
               <div>
                 <div className="popup-label">Sinice</div>
                 <div className="popup-value">{beach.cyanobacteria ? 'Tak' : 'Nie'}</div>
@@ -207,7 +228,7 @@ function BeachMap({ beaches, isFullscreen, onToggleFullscreen, selectedBeach }) 
         onClick={onToggleFullscreen}
         title={isFullscreen ? 'Zamknij fullscreen' : 'Fullscreen'}
       >
-        {isFullscreen ? '✕' : '⛶'}
+        {isFullscreen ? '✕' : '⤢'}
       </button>
 
       <MapContainer
@@ -221,7 +242,7 @@ function BeachMap({ beaches, isFullscreen, onToggleFullscreen, selectedBeach }) 
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomWatcher onZoomChange={handleZoomChange} />
-        <MapCenter selectedBeach={selectedBeach} />
+        <MapCenter selectedBeach={selectedBeach} isFullscreen={isFullscreen} />
         {beaches.map(beach => {
           const crowdingLevel = getCrowdingLevel(beach.crowding)
           const isSelected = openPopupId === beach.id

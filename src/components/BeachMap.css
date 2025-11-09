@@ -201,6 +201,12 @@
   font-weight: 600;
 }
 
+@media (min-width: 769px) {
+  .leaflet-popup-content-wrapper {
+    min-width: 320px;
+  }
+}
+
 @media (max-width: 768px) {
   .map-container {
     min-height: 100%;

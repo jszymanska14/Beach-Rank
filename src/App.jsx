@@ -4,6 +4,7 @@ import BeachList from './components/BeachList'
 import BeachMap from './components/BeachMap'
 import ResizablePanels from './components/ResizablePanels'
 import { beaches } from './data/beaches'
+import logo from './assets/logo.jpeg'
 import './App.css'
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
   const openMapFullscreen = () => setIsMapFullscreen(true)
 
   const handleBeachClick = (beach) => {
-    setSelectedBeach(beach)
+    setSelectedBeach(current => deriveSelectedBeach(beach, current))
     if (window.innerWidth <= 768) {
       setIsMapFullscreen(true)
     }
@@ -38,7 +39,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>🏖️ Beach Rank</h1>
+        <h1><img src={logo} alt="Beach Rank Logo" className="logo" /> Beach Rank</h1>
       </header>
 
       <div className="app-content">
@@ -100,6 +101,13 @@ function filterBeaches(beaches, filters, searchQuery) {
     
     return true
   })
+}
+
+function deriveSelectedBeach(nextBeach, currentBeach) {
+  if (currentBeach && currentBeach.id === nextBeach.id) {
+    return { ...nextBeach }
+  }
+  return nextBeach
 }
 
 export default App
