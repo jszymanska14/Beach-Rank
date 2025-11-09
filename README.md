@@ -33,6 +33,14 @@ Aplikacja będzie dostępna pod adresem `http://localhost:5173`
 npm run build
 ```
 
+## Deployment na GitHub Pages
+
+```bash
+npm run deploy
+```
+
+Aplikacja zostanie automatycznie zbudowana i opublikowana na GitHub Pages.
+
 ## Technologie
 
 - React 18
