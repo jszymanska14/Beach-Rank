@@ -127,7 +127,7 @@ function MapCenter({ selectedBeach, isFullscreen }) {
   }, [focusSelectedBeach])
 
   useEffect(() => {
-    const delay = isFullscreen ? 300 : 0
+    const delay = isFullscreen ? 300 : 100
     const timeoutId = setTimeout(() => {
       map.invalidateSize()
       focusSelectedBeach()

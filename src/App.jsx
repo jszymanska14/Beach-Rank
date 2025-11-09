@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import FilterSidebar from './components/FilterSidebar'
 import BeachList from './components/BeachList'
 import BeachMap from './components/BeachMap'
@@ -22,12 +22,35 @@ function App() {
     maxCrowding: 100,
     regions: []
   })
+  const isTransitioningRef = useRef(false)
 
   const filteredBeaches = filterBeaches(beaches, filters, searchQuery)
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
   const openSidebar = () => setIsSidebarOpen(true)
   const closeSidebar = () => setIsSidebarOpen(false)
   const openMapFullscreen = () => setIsMapFullscreen(true)
+
+  const handleToggleFullscreen = () => {
+    if (isTransitioningRef.current) {
+      return
+    }
+
+    isTransitioningRef.current = true
+
+    if (isMapFullscreen) {
+      setTimeout(() => {
+        setIsMapFullscreen(false)
+        setTimeout(() => {
+          isTransitioningRef.current = false
+        }, 200)
+      }, 50)
+    } else {
+      setIsMapFullscreen(true)
+      setTimeout(() => {
+        isTransitioningRef.current = false
+      }, 350)
+    }
+  }
 
   const handleBeachClick = (beach) => {
     setSelectedBeach(current => deriveSelectedBeach(beach, current))
@@ -57,7 +80,7 @@ function App() {
               <BeachMap
                 beaches={filteredBeaches}
                 isFullscreen={isMapFullscreen}
-                onToggleFullscreen={() => setIsMapFullscreen(!isMapFullscreen)}
+                onToggleFullscreen={handleToggleFullscreen}
                 selectedBeach={selectedBeach}
               />
             ) : (
@@ -76,7 +99,7 @@ function App() {
                   <BeachMap
                     beaches={filteredBeaches}
                     isFullscreen={isMapFullscreen}
-                    onToggleFullscreen={() => setIsMapFullscreen(!isMapFullscreen)}
+                    onToggleFullscreen={handleToggleFullscreen}
                     selectedBeach={selectedBeach}
                   />
                 }
